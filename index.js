@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 
 const app = express();
@@ -30,17 +30,37 @@ async function run() {
       const htmlQuizes = await cursor.toArray();
       res.send(htmlQuizes);
     });
+    app.get("/html/:qid", async (req, res) => {
+      const qid = parseInt(req.params.qid);
+      const query = { id: qid };
+      const htmlQuiz = await htmlQuizCollection.findOne(query);
+      res.send(htmlQuiz);
+    });
+
     app.get("/css", async (req, res) => {
       const query = {};
       const cursor = cssQuizCollection.find(query);
       const cssQuizes = await cursor.toArray();
       res.send(cssQuizes);
     });
+    app.get("/css/:qid", async (req, res) => {
+      const qid = parseInt(req.params.qid);
+      const query = { id: qid };
+      const cssQuiz = await cssQuizCollection.findOne(query);
+      res.send(cssQuiz);
+    });
+
     app.get("/js", async (req, res) => {
       const query = {};
       const cursor = jsQuizCollection.find(query);
       const jsQuizes = await cursor.toArray();
       res.send(jsQuizes);
+    });
+    app.get("/js/:qid", async (req, res) => {
+      const qid = parseInt(req.params.qid);
+      const query = { id: qid };
+      const jsQuiz = await jsQuizCollection.findOne(query);
+      res.send(jsQuiz);
     });
   } finally {
   }
